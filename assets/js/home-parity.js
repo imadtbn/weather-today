@@ -33,11 +33,30 @@ function renderWilayas(){
     link.href="weather/"+encodeURIComponent(city.slug)+"/";
     link.setAttribute("aria-label","عرض نشرة الطقس في "+city.name);
     const media=document.createElement("span");
-    media.className="directory-card__media is-photo-missing";
-    const placeholder=document.createElement("span");
-    placeholder.className="directory-card__photo-placeholder";
-    placeholder.textContent="ولاية "+city.code;
-    media.append(placeholder);
+    media.className="directory-card__media";
+    const photo=document.createElement("img");
+    photo.className="directory-card__photo";
+    photo.alt="صورة فوتوغرافية لمدينة "+city.name;
+    photo.loading="lazy";
+    photo.decoding="async";
+    photo.addEventListener("error",()=>{
+      photo.remove();
+      media.classList.add("is-photo-missing");
+      const fallback=document.createElement("span");
+      fallback.className="directory-card__photo-placeholder";
+      fallback.textContent="صورة "+city.name+" غير متاحة حالياً";
+      media.append(fallback);
+    },{once:true});
+    if(typeof city.countryImages==="string"&&city.countryImages.trim()){
+      photo.src=new URL(city.countryImages.trim(),document.baseURI).href;
+      media.append(photo);
+    }else{
+      media.classList.add("is-photo-missing");
+      const fallback=document.createElement("span");
+      fallback.className="directory-card__photo-placeholder";
+      fallback.textContent="صورة "+city.name+" غير متاحة حالياً";
+      media.append(fallback);
+    }
     const body=document.createElement("span");
     body.className="directory-card__body";
     const meta=document.createElement("span");

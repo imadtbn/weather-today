@@ -2,6 +2,60 @@ const fs = require('fs');
 const path = require('path');
 
 const rootDir = path.resolve(__dirname, '..');
+
+const SITE_URL = 'https://imadtbn.github.io/weather-today/';
+const BASE_SEO_KEYWORDS = [
+  'الطقس اليوم', 'حالة الطقس الآن', 'توقعات الطقس', 'طقس الجزائر', 'الطقس في الجزائر',
+  'حالة الطقس في المدن', 'توقعات الطقس الأسبوعية', 'توقعات الطقس الساعية',
+  'درجات الحرارة', 'احتمال الأمطار', 'سرعة الرياح', 'النشرة الجوية',
+  'météo aujourd’hui', 'météo en Algérie', 'prévisions météo', 'météo par ville',
+  'température', 'prévisions sur 7 jours',
+  'weather today', 'current weather', 'weather forecast', 'hourly weather',
+  '7-day weather forecast', 'weather in Algeria', 'world weather'
+];
+function buildSeoJsonLd({ name, url, description, keywords = [], entity = null, breadcrumbs = [], pageType = 'WebPage' }) {
+  const pageId = url + '#webpage';
+  const graph = [
+    {
+      '@type': 'Organization',
+      '@id': SITE_URL + '#organization',
+      name: 'Weather Today | الطقس اليوم',
+      url: SITE_URL,
+      logo: { '@type': 'ImageObject', url: SITE_URL + 'favicon.svg' }
+    },
+    {
+      '@type': 'WebSite',
+      '@id': SITE_URL + '#website',
+      name: 'Weather Today | الطقس اليوم',
+      alternateName: ['الطقس اليوم', 'Weather Today', 'Météo aujourd’hui'],
+      url: SITE_URL,
+      inLanguage: ['ar-DZ', 'fr', 'en'],
+      publisher: { '@id': SITE_URL + '#organization' }
+    },
+    {
+      '@type': pageType,
+      '@id': pageId,
+      name,
+      description,
+      url,
+      inLanguage: 'ar-DZ',
+      isPartOf: { '@id': SITE_URL + '#website' },
+      publisher: { '@id': SITE_URL + '#organization' },
+      keywords: [...new Set([...BASE_SEO_KEYWORDS, ...keywords])],
+      ...(entity ? { about: { '@id': url + '#place' }, mainEntity: { '@id': url + '#place' } } : {})
+    }
+  ];
+  if (entity) graph.push({ '@type': 'Place', '@id': url + '#place', ...entity });
+  if (breadcrumbs.length) graph.push({
+    '@type': 'BreadcrumbList',
+    '@id': url + '#breadcrumb',
+    itemListElement: breadcrumbs.map((item, index) => ({
+      '@type': 'ListItem', position: index + 1, name: item.name, item: item.url
+    }))
+  });
+  return '<script type="application/ld+json">' + JSON.stringify({ '@context': 'https://schema.org', '@graph': graph }).replace(/<\\/script/gi, '<\\\\/script') + '</script>';
+}
+
 const citiesPath = path.join(rootDir, 'data', 'cities.json');
 const capitalsPath = path.join(rootDir, 'data', 'arab-capitals.json');
 const worldCapitalsPath = path.join(rootDir, 'data', 'world-capitals.json');
@@ -128,26 +182,29 @@ cities.forEach((city) => {
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="طقس ولاية ${city.name} | Weather Today">
   <meta name="twitter:description" content="حالة الطقس والتوقعات الجوية لولاية ${city.name}.">
-  <meta name="keywords" content="طقس ${city.name}, طقس ${city.name_fr}, ولاية ${city.code}, طقس الجزائر, أحوال الجو ${city.slug}">
   <meta name="theme-color" content="#0c5b8c">
   <title>طقس ولاية ${city.name} (${city.code}) | Weather Today | الطقس اليوم</title>
   <link rel="icon" href="../../favicon.svg" type="image/svg+xml">
   <link rel="manifest" href="../../manifest.json">
   <link rel="stylesheet" href="../../assets/css/site.css">
   <link rel="canonical" href="https://imadtbn.github.io/weather-today/weather/${city.slug}/">
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "Place",
-    "name": "${city.name}",
-    "alternateName": ["${city.name_fr}", "${city.name_en}"],
-    "geo": {
-      "@type": "GeoCoordinates",
-      "latitude": ${city.latitude},
-      "longitude": ${city.longitude}
-    }
-  }
-  </script>
+  ${buildSeoJsonLd({
+    name: 'طقس ولاية ' + city.name + ' | Weather in ' + (city.name_en || city.name),
+    url: 'https://imadtbn.github.io/weather-today/weather/' + city.slug + '/',
+    description: 'حالة الطقس الحالية والتوقعات الساعية والأسبوعية في ولاية ' + city.name + '، الجزائر. ' + (city.name_fr || city.name) + ' · ' + (city.name_en || city.name) + '.',
+    keywords: ['طقس ' + city.name, 'الطقس في ' + city.name, 'météo ' + (city.name_fr || city.name), 'weather in ' + (city.name_en || city.name), 'ولاية ' + city.code, 'طقس ولاية ' + city.name],
+    entity: {
+      name: city.name,
+      alternateName: [city.name_fr, city.name_en].filter(Boolean),
+      containedInPlace: { '@type': 'AdministrativeArea', name: 'ولاية ' + city.name + ', الجزائر' },
+      geo: { '@type': 'GeoCoordinates', latitude: city.latitude, longitude: city.longitude }
+    },
+    breadcrumbs: [
+      { name: 'الرئيسية', url: SITE_URL },
+      { name: 'ولايات الجزائر', url: SITE_URL + 'wilayas/' },
+      { name: 'طقس ' + city.name, url: 'https://imadtbn.github.io/weather-today/weather/' + city.slug + '/' }
+    ]
+  })}
 </head>
 <body>
   <a class="skip-link" href="#main">تجاوز إلى المحتوى</a>
@@ -262,17 +319,23 @@ worldCapitals.forEach((city) => {
   <meta property="og:url" content="${canonical}">
   ${image ? '<meta property="og:image" content="https://imadtbn.github.io' + image + '">' : ''}
   <meta name="twitter:card" content="summary_large_image">
-  <script type="application/ld+json">
-  ${JSON.stringify({
-    '@context': 'https://schema.org',
-    '@type': 'Place',
-    name,
-    alternateName: englishName,
-    containedInPlace: { '@type': 'Country', name: country },
-    geo: { '@type': 'GeoCoordinates', latitude: city.latitude, longitude: city.longitude },
-    url: canonical
+  ${buildSeoJsonLd({
+    name: 'طقس ' + name + '، ' + country + ' | Weather in ' + englishName,
+    url: canonical,
+    description: description + ' Weather in ' + englishName + ', ' + country + '.',
+    keywords: ['طقس ' + name, 'الطقس في ' + name, 'weather in ' + englishName, 'météo ' + englishName, 'weather forecast ' + englishName, 'prévisions météo ' + englishName, 'طقس ' + country],
+    entity: {
+      name,
+      alternateName: [englishName].filter(Boolean),
+      containedInPlace: { '@type': 'Country', name: country },
+      geo: { '@type': 'GeoCoordinates', latitude: city.latitude, longitude: city.longitude }
+    },
+    breadcrumbs: [
+      { name: 'الرئيسية', url: SITE_URL },
+      { name: 'عواصم العالم', url: SITE_URL + 'world-capitals/' },
+      { name: 'طقس ' + name, url: canonical }
+    ]
   })}
-  </script>
   <style>
     .capital-hero{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(220px,.65fr);gap:1.5rem;align-items:center}
     .capital-hero__photo{display:block;width:100%;height:100%;min-height:220px;max-height:320px;object-fit:cover;border-radius:1.25rem}
@@ -380,6 +443,23 @@ directoryConfig.forEach((cfg) => {
   <meta name="theme-color" content="#0c5b8c">
   <meta name="robots" content="index,follow,max-image-preview:large">
   <link rel="canonical" href="https://imadtbn.github.io/weather-today/${cfg.folder}/">
+  ${buildSeoJsonLd({
+    name: cfg.title,
+    url: SITE_URL + cfg.folder + '/',
+    description: cfg.intro,
+    pageType: 'CollectionPage',
+    keywords: cfg.kind === 'wilayas'
+      ? ['طقس الولايات الجزائرية', 'weather Algeria cities', 'météo wilayas Algérie', 'طقس 69 ولاية']
+      : cfg.kind === 'arab-capitals'
+        ? ['طقس العواصم العربية', 'weather Arab capitals', 'météo capitales arabes']
+        : cfg.kind === 'world-capitals'
+          ? ['طقس عواصم العالم', 'world capitals weather', 'météo capitales du monde']
+          : ['بحث عن الطقس', 'global weather search', 'recherche météo mondiale'],
+    breadcrumbs: [
+      { name: 'الرئيسية', url: SITE_URL },
+      { name: cfg.heading, url: SITE_URL + cfg.folder + '/' }
+    ]
+  })}
   <meta property="og:site_name" content="Weather Today | الطقس اليوم">
   <meta property="og:title" content="${cfg.title}">
   <meta property="og:description" content="${cfg.intro}">

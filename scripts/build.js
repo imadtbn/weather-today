@@ -452,6 +452,10 @@ directoryConfig.forEach((cfg) => {
         ? ['طقس العواصم العربية', 'weather Arab capitals', 'météo capitales arabes']
         : cfg.kind === 'world-capitals'
           ? ['طقس عواصم العالم', 'world capitals weather', 'météo capitales du monde']
+          : cfg.kind === 'favorites'
+        ? ['المدن والولايات المفضلة', 'saved weather locations', 'villes météo favorites']
+        : cfg.kind === 'alerts'
+          ? ['الإنذارات الجوية', 'النشرات الجوية الخاصة', 'alertes météo', 'weather alerts', 'bulletin météorologique spécial']
           : ['بحث عن الطقس', 'global weather search', 'recherche météo mondiale'],
     breadcrumbs: [
       { name: 'الرئيسية', url: SITE_URL },

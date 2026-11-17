@@ -118,7 +118,7 @@ if (kind === "wilayas" || kind === "arab-capitals") {
       const rows = capitals.filter(city => normalize([city.country,city.capital,city.englishName].join(" ")).includes(query));
       grid.replaceChildren(...rows.map(city => {
         const card = makeCard({
-          href:"../global-weather/?lat="+encodeURIComponent(city.latitude)+"&lon="+encodeURIComponent(city.longitude)+"&name="+encodeURIComponent(city.capital),
+          href:"../world-capitals/"+encodeURIComponent(city.slug)+"/",
           label:"عرض الطقس في "+city.capital,
             meta:countryFlag(city.country)+" · "+city.country,
           title:city.capital,
@@ -140,7 +140,7 @@ if (kind === "wilayas" || kind === "arab-capitals") {
 if (kind === "world-capitals") {
   const worldCapitals = JSON.parse(document.querySelector("#world-capitals-data")?.textContent || "[]");
   const params = new URLSearchParams(location.search);
-  const validContinents = new Set(["all","africa","europe","america","asia"]);
+  const validContinents = new Set(["all","africa","europe","america","asia","oceania"]);
   let activeContinent = validContinents.has(params.get("continent")) ? (params.get("continent") || "all") : "all";
 
   const tabs = document.createElement("div");
@@ -150,7 +150,7 @@ if (kind === "world-capitals") {
   tabs.style.gridColumn = "1 / -1";
   const continents = [
     ["all","كل القارات"],["africa","إفريقيا"],["europe","أوروبا"],
-    ["america","الأمريكتان"],["asia","آسيا"]
+    ["america","الأمريكتان"],["asia","آسيا"],["oceania","أوقيانوسيا"]
   ];
   const buttons = continents.map(([key,label]) => {
     const button = document.createElement("button");
@@ -203,8 +203,7 @@ if (kind === "world-capitals") {
     });
     grid.replaceChildren(...rows.map(city => {
       const card = makeCard({
-        href: "../global-weather/?lat=" + encodeURIComponent(city.latitude) +
-          "&lon=" + encodeURIComponent(city.longitude) + "&name=" + encodeURIComponent(city.capital),
+        href: "../world-capitals/" + encodeURIComponent(city.slug) + "/",
         label: "عرض الطقس في " + city.capital + "، " + city.country,
         meta: flagFromCode(city.countryCode) + " · " + city.country,
         title: city.capital,

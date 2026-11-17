@@ -3,12 +3,14 @@ name: Weather Today static build
 on:
   push:
     branches: [main]
+  pull_request:
+    branches: [main]
 
 permissions:
   contents: write
 
 concurrency:
-  group: weather-today-static-build
+  group: weather-today-static-build-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
 
 jobs:
@@ -17,8 +19,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-        with:
-          ref: main
       - uses: actions/setup-node@v4
         with:
           node-version: 22
@@ -26,7 +26,10 @@ jobs:
         run: node scripts/build.js
       - name: Generate and validate PWA offline precache
         run: node scripts/generate-precache-manifest.js
-      - name: Commit generated pages and PWA manifest
+      - name: Validate generated city pages, SEO, ads and sitemap
+        run: node scripts/validate-static-build.js
+      - name: Commit generated pages on main pushes only
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"

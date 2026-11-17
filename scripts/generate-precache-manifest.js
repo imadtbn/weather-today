@@ -35,7 +35,7 @@ walk(ROOT, (absolute) => {
   addFile(absolute);
 });
 
-for (const directory of ["assets", "data"]) {
+for (const directory of ["assets", "data", "images"]) {
   walk(path.join(ROOT, directory), (absolute) => {
     if (INCLUDED_ASSET_EXTENSIONS.has(path.extname(absolute).toLowerCase())) {
       addFile(absolute);

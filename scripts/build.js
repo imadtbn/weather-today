@@ -53,7 +53,7 @@ function buildSeoJsonLd({ name, url, description, keywords = [], entity = null, 
       '@type': 'ListItem', position: index + 1, name: item.name, item: item.url
     }))
   });
-  return '<script type="application/ld+json">' + JSON.stringify({ '@context': 'https://schema.org', '@graph': graph }).replace(/<\\/script/gi, '<\\\\/script') + '</script>';
+  return '<script type="application/ld+json">' + JSON.stringify({ '@context': 'https://schema.org', '@graph': graph }).replace(/</g, '\\u003c') + '</script>';
 }
 
 const citiesPath = path.join(rootDir, 'data', 'cities.json');

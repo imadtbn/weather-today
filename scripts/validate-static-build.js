@@ -35,7 +35,7 @@ function validateSchema(html, label, requirePlace = false) {
     fail("Expected Schema.org @graph in " + label); return;
   }
   const types = schema["@graph"].map(node => node["@type"]);
-  if (!types.includes("Organization") || !types.includes("WebSite") || !types.includes("WebPage")) {
+  if (!types.includes("Organization") || !types.includes("WebSite") || (!types.includes("WebPage") && !types.includes("CollectionPage"))) {
     fail("Missing Organization, WebSite or WebPage entity in " + label);
   }
   if (!types.includes("BreadcrumbList")) fail("Missing BreadcrumbList in " + label);

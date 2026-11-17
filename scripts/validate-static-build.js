@@ -70,6 +70,11 @@ for (const page of pageSets) {
   if (!html.includes('data-ad-slot="7867079394"') || !html.includes('data-ad-slot="3143411927"')) fail("Expected AdSense placements missing: " + page.route);
   if (!html.includes("assets/js/pages.js") || !html.includes("assets/js/site.js")) fail("Shared page runtime missing: " + page.route);
 }
+for (const folder of ["agriculture-weather", "climate-observatory", "global-weather", "map", "marine"]) {
+  const file = path.join(ROOT, folder, "index.html");
+  if (!fs.existsSync(file)) { fail("Missing specialist page: " + folder); continue; }
+  validateSchema(fs.readFileSync(file, "utf8"), folder + "/index.html", false);
+}
 for (const folder of ["wilayas", "arab-capitals", "world-capitals", "world-search", "favorites", "alerts"]) {
   const file = path.join(ROOT, folder, "index.html");
   if (!fs.existsSync(file)) { fail("Missing directory page: " + folder); continue; }

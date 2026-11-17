@@ -31,10 +31,24 @@ if(cityPage){
   const marineSection=document.querySelector("#marine-section"),marineNode=document.querySelector("#weather-marine");
   const insights=document.querySelector("#weather-insights"),updated=document.querySelector("#weather-updated");
   const favorite=document.querySelector("#favorite-toggle"),refresh=document.querySelector("#weather-refresh");
-  const favoriteKey="atlas-favorite-cities-v1",cacheKey="atlas-weather-"+slug;
-  const readFavorites=()=>{try{const value=JSON.parse(localStorage.getItem(favoriteKey)||"[]");return Array.isArray(value)?value.filter(x=>typeof x==="string"):[]}catch{return []}};
-  const paintFavorite=()=>{const active=readFavorites().includes(slug);favorite.setAttribute("aria-pressed",String(active));favorite.textContent=active?"★ في المفضلة":"☆ أضف للمفضلة"};
-  favorite.addEventListener("click",()=>{const values=readFavorites();const next=values.includes(slug)?values.filter(x=>x!==slug):[...values,slug];try{localStorage.setItem(favoriteKey,JSON.stringify(next));}catch{}paintFavorite();});
+  const isCapital=cityPage.dataset.cityType==="capital";
+  const favoriteKey=isCapital?"atlas-favorite-global-cities-v1":"atlas-favorite-cities-v1";
+  const cacheKey="atlas-weather-"+slug;
+  const readFavorites=()=>{try{const value=JSON.parse(localStorage.getItem(favoriteKey)||"[]");return Array.isArray(value)?value:[]}catch{return []}};
+  const isFavorite=()=>isCapital?readFavorites().some(item=>item&&item.id==="world:"+slug):readFavorites().includes(slug);
+  const paintFavorite=()=>{const active=isFavorite();favorite.setAttribute("aria-pressed",String(active));favorite.textContent=active?"★ في المفضلة":"☆ أضف للمفضلة";};
+  favorite.addEventListener("click",()=>{
+    const values=readFavorites();
+    if(isCapital){
+      const id="world:"+slug,exists=values.some(item=>item&&item.id===id);
+      const next=exists?values.filter(item=>!item||item.id!==id):[...values.filter(item=>item&&typeof item.id==="string"),{id,name,country:document.querySelector(".capital-weather-page")?.querySelector(".eyebrow")?.textContent||"",latitude:lat,longitude:lon}].slice(-100);
+      try{localStorage.setItem(favoriteKey,JSON.stringify(next));}catch{}
+    }else{
+      const next=values.includes(slug)?values.filter(item=>item!==slug):[...values,slug];
+      try{localStorage.setItem(favoriteKey,JSON.stringify(next));}catch{}
+    }
+    paintFavorite();
+  });
   paintFavorite();
 
   const labels={0:"سماء صافية",1:"صحو غالباً",2:"غائم جزئياً",3:"غائم",45:"ضباب",48:"ضباب كثيف",51:"رذاذ خفيف",53:"رذاذ",55:"رذاذ كثيف",56:"رذاذ متجمد",57:"رذاذ متجمد كثيف",61:"أمطار خفيفة",63:"أمطار",65:"أمطار غزيرة",66:"مطر متجمد",67:"مطر متجمد كثيف",71:"ثلوج خفيفة",73:"ثلوج",75:"ثلوج كثيفة",77:"حبيبات ثلجية",80:"زخات مطر",81:"زخات مطر",82:"زخات غزيرة",85:"زخات ثلجية",86:"زخات ثلجية كثيفة",95:"عواصف رعدية",96:"عواصف مع برد",99:"عواصف قوية مع برد"};

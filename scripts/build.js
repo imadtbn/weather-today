@@ -912,7 +912,7 @@ directoryConfig.forEach((cfg) => {
       <div class="hero-copy">
         <span class="eyebrow"><span class="status-dot"></span> Weather Today | الطقس اليوم</span>
         <h1>الطقس حولك،<br><em>أينما كنت.</em></h1>
-        <p>تابع حالة الطقس الحالية والتوقعات الساعية والأسبوعية لمدينتك حول العالم، مع تحديد موقعك عبر GPS وتغطية 69 ولاية جزائرية و22 عاصمة عربية و145 عاصمة عالمية.</p>
+        <p>تابع حالة الطقس الحالية والتوقعات الساعية والأسبوعية لمدينتك حول العالم، مع تحديد موقعك عبر GPS وتغطية 69 ولاية جزائرية و22 عاصمة عربية و195 عاصمة عالمية. Météo et weather forecast للمدن حول العالم.</p>
         <div class="hero-actions">
           <a class="button button-primary" href="./wilayas/" data-i18n="explore_wilayas">استكشف الولايات الـ 69 <span aria-hidden="true">←</span></a>
           <a class="button button-secondary" href="./world-search/" <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i><span data-i18n="nav_world_search">بحث عالمي</span></a>

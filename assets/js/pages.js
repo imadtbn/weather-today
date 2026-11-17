@@ -41,7 +41,7 @@ if(cityPage){
     const values=readFavorites();
     if(isCapital){
       const id="world:"+slug,exists=values.some(item=>item&&item.id===id);
-      const next=exists?values.filter(item=>!item||item.id!==id):[...values.filter(item=>item&&typeof item.id==="string"),{id,name,country:document.querySelector(".capital-weather-page")?.querySelector(".eyebrow")?.textContent||"",latitude:lat,longitude:lon}].slice(-100);
+      const next=exists?values.filter(item=>!item||item.id!==id):[...values.filter(item=>item&&typeof item.id==="string"),{id,name,country:cityPage.dataset.country||"",latitude:lat,longitude:lon}].slice(-100);
       try{localStorage.setItem(favoriteKey,JSON.stringify(next));}catch{}
     }else{
       const next=values.includes(slug)?values.filter(item=>item!==slug):[...values,slug];

@@ -1052,7 +1052,19 @@ directoryConfig.forEach((cfg) => {
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="description" content="خريطة الطقس التفاعلية للولايات الجزائرية الـ69 والعواصم العربية مع طبقات الأمطار والحرارة والرياح.">
+  <meta name="description" content="خريطة الطقس التفاعلية للولايات الجزائرية والعواصم العربية والعالمية مع طبقات الأمطار ودرجات الحرارة والرياح.">
+  <meta name="robots" content="index,follow,max-image-preview:large">
+  <link rel="canonical" href="https://imadtbn.github.io/weather-today/map/">
+  ${buildSeoJsonLd({
+    name: 'خريطة الطقس التفاعلية | Weather Today',
+    url: SITE_URL + 'map/',
+    description: 'خريطة الطقس التفاعلية للولايات الجزائرية والعواصم العربية والعالمية مع طبقات الأمطار والحرارة والرياح.',
+    keywords: ['خريطة الطقس', 'خريطة الأمطار', 'خريطة درجات الحرارة', 'خريطة الرياح', 'carte météo', 'carte des précipitations', 'weather map', 'rain radar map', 'temperature map', 'wind map'],
+    breadcrumbs: [
+      { name: 'الرئيسية', url: SITE_URL },
+      { name: 'خريطة الطقس', url: SITE_URL + 'map/' }
+    ]
+  })}
   <meta name="theme-color" content="#0c5b8c">
   <link rel="canonical" href="https://imadtbn.github.io/weather-today/map/">
   <title>خريطة الطقس التفاعلية | Weather Today | الطقس اليوم</title>

@@ -282,7 +282,7 @@ worldCapitals.forEach((city) => {
 <body>
   <a class="skip-link" href="#main">تجاوز إلى المحتوى</a>
   ${getHeader(2, 'world-capitals')}
-  <main id="main" class="city-page capital-weather-page" data-city-type="capital" data-lat="${city.latitude}" data-lon="${city.longitude}" data-city="${name}" data-slug="${city.slug}" data-coastal="false">
+  <main id="main" class="city-page capital-weather-page" data-city-type="capital" data-country="${country}" data-lat="${city.latitude}" data-lon="${city.longitude}" data-city="${name}" data-slug="${city.slug}" data-coastal="false">
     <section class="hero city-hero capital-hero">
       <div class="hero-copy">
         <span class="eyebrow"><span class="status-dot"></span> ${city.continentName || 'عواصم العالم'} · ${country}</span>

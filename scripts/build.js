@@ -19,14 +19,17 @@ const arabCapitalGeography = {
   damascus: ['asia', 'SY'], tunis: ['africa', 'TN'], 'abu-dhabi': ['asia', 'AE'],
   sanaa: ['asia', 'YE']
 };
-const continentNames = { africa: 'إفريقيا', europe: 'أوروبا', america: 'الأمريكتان', asia: 'آسيا' };
-const worldCapitals = [
-  ...worldCapitalRows,
-  ...capitals.map(city => {
-    const [continent, countryCode] = arabCapitalGeography[city.slug] || ['asia', ''];
-    return { ...city, continent, continentName: continentNames[continent], countryCode };
-  })
-];
+const continentNames = { africa: 'إفريقيا', europe: 'أوروبا', america: 'الأمريكتان', asia: 'آسيا', oceania: 'أوقيانوسيا' };
+const worldCapitals = worldCapitalRows.map(city => {
+  const geography = arabCapitalGeography[city.slug];
+  if (!geography) return { ...city, continentName: city.continentName || continentNames[city.continent] || 'العالم' };
+  const [continent, countryCode] = geography;
+  return { ...city, continent, continentName: continentNames[continent], countryCode: countryCode || city.countryCode };
+});
+if (new Set(worldCapitals.map(city => city.slug)).size !== worldCapitals.length) {
+  throw new Error('World capital slugs must be unique.');
+}
+if (worldCapitals.length !== 195) throw new Error('Expected 195 unique world capitals; found ' + worldCapitals.length);
 
 console.log(`Loaded ${cities.length} Algerian wilayas, ${capitals.length} Arab capitals, and ${worldCapitals.length} world capitals.`);
 
@@ -42,17 +45,17 @@ function getHeader(depth = 0, activeKey = '') {
       <i class="fa-solid fa-bars" aria-hidden="true"></i>
     </button>
     <nav class="primary-navigation" id="primary-navigation" aria-label="التنقل الرئيسي">
-      <a href="${rel}" ${activeKey === 'home' ? 'aria-current="page"' : ''} <i class="fa-solid fa-house" aria-hidden="true"></i><span data-i18n="nav_home">الرئيسية</span></a>
-      <a href="${rel}wilayas/" ${activeKey === 'wilayas' ? 'aria-current="page"' : ''} <i class="fa-solid fa-map-location-dot" aria-hidden="true"></i><span data-i18n="nav_wilayas">الولايات</span></a>
-      <a href="${rel}arab-capitals/" ${activeKey === 'capitals' ? 'aria-current="page"' : ''} <i class="fa-solid fa-earth-africa" aria-hidden="true"></i><span data-i18n="nav_capitals">العواصم العربية</span></a>
+      <a href="${rel}" ${activeKey === 'home' ? 'aria-current="page"' : ''}><i class="fa-solid fa-house" aria-hidden="true"></i><span data-i18n="nav_home">الرئيسية</span></a>
+      <a href="${rel}wilayas/" ${activeKey === 'wilayas' ? 'aria-current="page"' : ''}><i class="fa-solid fa-map-location-dot" aria-hidden="true"></i><span data-i18n="nav_wilayas">الولايات</span></a>
+      <a href="${rel}arab-capitals/" ${activeKey === 'capitals' ? 'aria-current="page"' : ''}><i class="fa-solid fa-earth-africa" aria-hidden="true"></i><span data-i18n="nav_capitals">العواصم العربية</span></a>
       <a href="${rel}world-capitals/" ${activeKey === 'world-capitals' ? 'aria-current="page"' : ''}><i class="fa-solid fa-globe" aria-hidden="true"></i><span>عواصم العالم</span></a>
-      <a href="${rel}world-search/" ${activeKey === 'search' ? 'aria-current="page"' : ''} <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i><span data-i18n="nav_world_search">بحث عالمي</span></a>
-      <a href="${rel}map/" ${activeKey === 'map' ? 'aria-current="page"' : ''} <i class="fa-solid fa-map" aria-hidden="true"></i><span data-i18n="nav_map">خريطة الطقس</span></a>
-      <a href="${rel}climate-observatory/" ${activeKey === 'climate' ? 'aria-current="page"' : ''} <i class="fa-solid fa-chart-line" aria-hidden="true"></i><span data-i18n="nav_climate">المرصد المناخي</span></a>
-      <a href="${rel}agriculture-weather/" ${activeKey === 'agri' ? 'aria-current="page"' : ''} <i class="fa-solid fa-seedling" aria-hidden="true"></i><span data-i18n="nav_agri">الطقس الزراعي</span></a>
-      <a href="${rel}marine/" ${activeKey === 'marine' ? 'aria-current="page"' : ''} <i class="fa-solid fa-water" aria-hidden="true"></i><span data-i18n="nav_marine">الطقس البحري</span></a>
-      <a href="${rel}alerts/" ${activeKey === 'alerts' ? 'aria-current="page"' : ''} <i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i><span data-i18n="nav_alerts">الإنذارات</span></a>
-      <a href="${rel}favorites/" ${activeKey === 'favorites' ? 'aria-current="page"' : ''} <i class="fa-solid fa-star" aria-hidden="true"></i><span data-i18n="nav_favorites">المفضلة</span></a>
+      <a href="${rel}world-search/" ${activeKey === 'search' ? 'aria-current="page"' : ''}><i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i><span data-i18n="nav_world_search">بحث عالمي</span></a>
+      <a href="${rel}map/" ${activeKey === 'map' ? 'aria-current="page"' : ''}><i class="fa-solid fa-map" aria-hidden="true"></i><span data-i18n="nav_map">خريطة الطقس</span></a>
+      <a href="${rel}climate-observatory/" ${activeKey === 'climate' ? 'aria-current="page"' : ''}><i class="fa-solid fa-chart-line" aria-hidden="true"></i><span data-i18n="nav_climate">المرصد المناخي</span></a>
+      <a href="${rel}agriculture-weather/" ${activeKey === 'agri' ? 'aria-current="page"' : ''}><i class="fa-solid fa-seedling" aria-hidden="true"></i><span data-i18n="nav_agri">الطقس الزراعي</span></a>
+      <a href="${rel}marine/" ${activeKey === 'marine' ? 'aria-current="page"' : ''}><i class="fa-solid fa-water" aria-hidden="true"></i><span data-i18n="nav_marine">الطقس البحري</span></a>
+      <a href="${rel}alerts/" ${activeKey === 'alerts' ? 'aria-current="page"' : ''}><i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i><span data-i18n="nav_alerts">الإنذارات</span></a>
+      <a href="${rel}favorites/" ${activeKey === 'favorites' ? 'aria-current="page"' : ''}><i class="fa-solid fa-star" aria-hidden="true"></i><span data-i18n="nav_favorites">المفضلة</span></a>
     </nav>
     <div class="header-actions">
       <!-- Language Switcher -->
@@ -224,7 +227,93 @@ cities.forEach((city) => {
   fs.writeFileSync(path.join(wilayaDir, 'index.html'), html, 'utf8');
 });
 
+
 console.log(`Generated 69 static wilaya pages successfully.`);
+
+// Generate one independent, indexable weather page for every unique world capital.
+// Arab capitals are already part of worldCapitals and therefore are never duplicated.
+worldCapitals.forEach((city) => {
+  const dirPath = path.join(rootDir, 'world-capitals', city.slug);
+  fs.mkdirSync(dirPath, { recursive: true });
+  const country = city.country || '';
+  const name = city.capital || city.name || city.englishName;
+  const englishName = city.englishName || name;
+  const image = city.countryImages || '';
+  const canonical = 'https://imadtbn.github.io/weather-today/world-capitals/' + city.slug + '/';
+  const description = 'حالة الطقس المباشرة والتوقعات الساعية واليومية في ' + name + '، عاصمة ' + country + '. درجات الحرارة والأمطار والرياح من Open-Meteo.';
+  const html = `<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="${description}">
+  <meta name="robots" content="index,follow,max-image-preview:large">
+  <meta name="theme-color" content="#0c5b8c">
+  <title>طقس ${name}، ${country} | Weather Today | الطقس اليوم</title>
+  <link rel="canonical" href="${canonical}">
+  <link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+  <link rel="manifest" href="../../manifest.json">
+  <link rel="stylesheet" href="../../assets/css/site.css">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Weather Today | الطقس اليوم">
+  <meta property="og:locale" content="ar">
+  <meta property="og:title" content="طقس ${name}، ${country} | Weather Today">
+  <meta property="og:description" content="${description}">
+  <meta property="og:url" content="${canonical}">
+  ${image ? '<meta property="og:image" content="https://imadtbn.github.io' + image + '">' : ''}
+  <meta name="twitter:card" content="summary_large_image">
+  <script type="application/ld+json">
+  ${JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'Place',
+    name,
+    alternateName: englishName,
+    containedInPlace: { '@type': 'Country', name: country },
+    geo: { '@type': 'GeoCoordinates', latitude: city.latitude, longitude: city.longitude },
+    url: canonical
+  })}
+  </script>
+  <style>
+    .capital-hero{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(220px,.65fr);gap:1.5rem;align-items:center}
+    .capital-hero__photo{display:block;width:100%;height:100%;min-height:220px;max-height:320px;object-fit:cover;border-radius:1.25rem}
+    @media(max-width:720px){.capital-hero{grid-template-columns:1fr}.capital-hero__photo{min-height:180px;max-height:220px}}
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#main">تجاوز إلى المحتوى</a>
+  ${getHeader(2, 'world-capitals')}
+  <main id="main" class="city-page capital-weather-page" data-city-type="capital" data-lat="${city.latitude}" data-lon="${city.longitude}" data-city="${name}" data-slug="${city.slug}" data-coastal="false">
+    <section class="hero city-hero capital-hero">
+      <div class="hero-copy">
+        <span class="eyebrow"><span class="status-dot"></span> ${city.continentName || 'عواصم العالم'} · ${country}</span>
+        <h1>طقس <em>${name}</em></h1>
+        <p>تابع الطقس الحالي والتوقعات الجوية في ${name}، عاصمة ${country}، مع بيانات حية حسب الإحداثيات المحلية.</p>
+        <div class="hero-actions">
+          <a class="button button-secondary" href="../../world-capitals/">دليل عواصم العالم</a>
+          <button class="button button-primary" id="favorite-toggle" type="button" aria-pressed="false"><i class="fa-solid fa-star" aria-hidden="true"></i><span>أضف للمفضلة</span></button>
+        </div>
+      </div>
+      ${image ? '<img class="capital-hero__photo" src="' + image + '" alt="صورة مدينة ' + name + '" loading="eager" decoding="async">' : '<aside class="hero-note"><strong>' + name + '</strong><p>' + country + '</p></aside>'}
+    </section>
+    <section class="content-section weather-section">
+      <div class="section-heading"><div><span class="eyebrow">01 — النشرة اللحظية</span><h2>حالة الطقس الآن في ${name}</h2></div><p id="weather-updated">المصدر: Open-Meteo · توقيت محلي</p></div>
+      <div id="weather-status" class="weather-status" role="status" aria-live="polite">جارٍ جلب بيانات الطقس المحدثة…</div>
+      <div id="weather-current" class="weather-current" hidden></div>
+      <div class="weather-actions"><button id="weather-refresh" class="button button-secondary" type="button"><i class="fa-solid fa-rotate" aria-hidden="true"></i><span>تحديث القراءة</span></button><span id="weather-source" class="weather-source">المصدر: Open-Meteo Global API</span></div>
+    </section>
+    <section class="content-section"><div class="section-heading"><div><span class="eyebrow">02 — التوقعات الساعية</span><h2>الطقس خلال الساعات القادمة</h2></div><p>توقعات ساعية على مدار اليوم.</p></div><div id="weather-hourly" class="weather-hourly" aria-live="polite"></div></section>
+    <section class="content-section"><div class="section-heading"><div><span class="eyebrow">03 — التوقعات الأسبوعية</span><h2>توقعات الأيام السبعة القادمة</h2></div><p>درجات الحرارة والتساقط وحركة الرياح.</p></div><div id="weather-daily" class="weather-daily"></div></section>
+    <section class="content-section"><div class="section-heading"><div><span class="eyebrow">04 — التوصيات الذكية</span><h2>إرشادات الطقس في ${name}</h2></div><p>نصائح مبنية على قراءات الطقس الحالية.</p></div><div id="weather-insights" class="weather-insights"></div></section>
+  </main>
+  ${getFooter(2)}
+  <script type="module" src="../../assets/js/site.js"></script>
+  <script type="module" src="../../assets/js/pages.js"></script>
+</body>
+</html>`;
+  fs.writeFileSync(path.join(dirPath, 'index.html'), html, 'utf8');
+});
+console.log('Generated ' + worldCapitals.length + ' independent world-capital weather pages.');
+
 
 // 2. Generate directory pages
 const directoryConfig = [
@@ -250,7 +339,7 @@ const directoryConfig = [
     title: 'عواصم العالم حسب القارات | Weather Today | الطقس اليوم',
     heading: 'طقس عواصم العالم',
     intro: 'اكتشف حالة الطقس في عواصم إفريقيا وأوروبا والأمريكتين وآسيا، مع بحث متعدد اللغات وبيانات جوية مرتبطة بالإحداثيات الجغرافية لكل عاصمة.',
-    subheading: 'استكشف عواصم القارات الأربع'
+    subheading: 'استكشف عواصم القارات الخمس'
   },
   {
     folder: 'world-search',
@@ -773,11 +862,11 @@ directoryConfig.forEach((cfg) => {
     <section class="content-section world-capitals-preview" aria-labelledby="world-capitals-heading">
       <div class="section-heading">
         <div><span class="eyebrow">استكشف العالم</span><h2 id="world-capitals-heading">عواصم العالم</h2></div>
-        <p>${worldCapitals.length} عاصمة من أربع قارات</p>
+        <p>${worldCapitals.length} عاصمة من القارات الخمس</p>
       </div>
       <div class="feature-grid world-capitals-continent-grid home-world-preview">
         ${[
-          ['africa','إفريقيا','🌍'],['europe','أوروبا','🏛️'],['america','الأمريكتان','🌎'],['asia','آسيا','🌏']
+          ['africa','إفريقيا','🌍'],['europe','أوروبا','🏛️'],['america','الأمريكتان','🌎'],['asia','آسيا','🌏'],['oceania','أوقيانوسيا','🌊']
         ].map(([key,label,icon]) => `<a class="feature-card" href="./world-capitals/?continent=${key}"><span class="feature-index">${icon}</span><h3>عواصم ${label}</h3><p>${worldCapitals.filter(city => city.continent === key).length} عاصمة · بيانات طقس مباشرة</p><span>استكشف القارة ←</span></a>`).join('')}
       </div>
       <div class="home-section-actions"><a class="button button-primary home-more-button" href="./world-capitals/">عرض المزيد من عواصم العالم</a></div>
@@ -890,9 +979,7 @@ console.log('Build completed successfully!');
   ];
 
   // Individual Algerian wilaya pages are statically generated at /weather/{slug}/.
-  // Arab and world capitals are exposed through their dedicated, crawlable directory
-  // pages; their weather cards use query-driven global-weather URLs that share one
-  // canonical page, so those duplicate query variants are intentionally excluded.
+  // Every world capital has an independent crawlable weather page under /world-capitals/{slug}/.
   if (cities.length !== 69) {
     throw new Error('Sitemap expects 69 Algerian wilayas; found ' + cities.length);
   }
@@ -902,7 +989,8 @@ console.log('Build completed successfully!');
 
   const routes = [...new Set([
     ...staticRoutes,
-    ...cities.map(city => '/weather/' + city.slug + '/')
+    ...cities.map(city => '/weather/' + city.slug + '/'),
+    ...worldCapitals.map(city => '/world-capitals/' + city.slug + '/')
   ])];
   const today = new Date().toISOString().slice(0, 10);
   const escapeXml = value => String(value)
@@ -930,9 +1018,8 @@ console.log('Build completed successfully!');
     'Sitemap: ' + siteBase + '/sitemap.xml\n',
     'utf8'
   );
-  console.log('Generated sitemap with ' + routes.length +
-    ' canonical URLs: ' + cities.length + ' wilaya pages, 22 Arab capitals ' +
-    'and the Arab/world directory pages.');
+  console.log('Generated sitemap with ' + routes.length + ' canonical URLs: ' + cities.length +
+    ' wilaya pages and ' + worldCapitals.length + ' independent world-capital pages.');
 }
 
 

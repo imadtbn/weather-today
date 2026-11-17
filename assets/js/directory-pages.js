@@ -35,7 +35,7 @@ if(kind==="wilayas"){
  root.append(card("إرشادات السلامة","اعتمد على النشرة الرسمية ولا تعتبر التوقعات العامة بديلاً عن التحذير. تحقق من وقت الإصدار والإلغاء قبل النشاط البحري أو التنقل.","https://www.meteo.dz/?lang=ar","مراجعة الديوان"));
  setStatus("هذه صفحة دليل روابط وليست خدمة إنذار مستقلة. المصدر الرسمي هو المرجع الوحيد للتحذيرات والقرارات.");
 }else if(kind==="arab-capitals"){
- const render=items=>{root.replaceChildren(...items.map(c=>card(c.capital,c.country+" · "+c.englishName,"../global-weather/?lat="+encodeURIComponent(c.latitude)+"&lon="+encodeURIComponent(c.longitude)+"&name="+encodeURIComponent(c.capital),"عرض الطقس")));setCount(items.length+" عاصمة عربية");};
+ const render=items=>{root.replaceChildren(...items.map(c=>card(c.capital,c.country+" · "+c.englishName,"../world-capitals/"+encodeURIComponent(c.slug)+"/","عرض الطقس")));setCount(items.length+" عاصمة عربية");};
  const input=node("input","directory-search-input");input.type="search";input.placeholder="ابحث باسم الدولة أو العاصمة";input.setAttribute("aria-label","بحث العواصم");const wrap=node("div","");wrap.style.cssText="grid-column:1/-1";wrap.append(input);root.append(wrap);input.addEventListener("input",()=>{const q=norm(input.value);render(capitals.filter(c=>norm([c.country,c.capital,c.englishName].join(" ")).includes(q)))});render(capitals);
 }else if(kind==="world-search"){
  const params=new URLSearchParams(location.search),initial=(params.get("q")||"").slice(0,100);

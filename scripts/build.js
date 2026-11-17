@@ -5,13 +5,11 @@ const rootDir = path.resolve(__dirname, '..');
 
 const SITE_URL = 'https://imadtbn.github.io/weather-today/';
 const BASE_SEO_KEYWORDS = [
-  'الطقس اليوم', 'حالة الطقس الآن', 'توقعات الطقس', 'طقس الجزائر', 'الطقس في الجزائر',
-  'حالة الطقس في المدن', 'توقعات الطقس الأسبوعية', 'توقعات الطقس الساعية',
-  'درجات الحرارة', 'احتمال الأمطار', 'سرعة الرياح', 'النشرة الجوية',
-  'météo aujourd’hui', 'météo en Algérie', 'prévisions météo', 'météo par ville',
-  'température', 'prévisions sur 7 jours',
+  'الطقس اليوم', 'حالة الطقس الآن', 'توقعات الطقس', 'درجات الحرارة',
+  'احتمال الأمطار', 'سرعة الرياح', 'النشرة الجوية',
+  'météo aujourd’hui', 'prévisions météo', 'température',
   'weather today', 'current weather', 'weather forecast', 'hourly weather',
-  '7-day weather forecast', 'weather in Algeria', 'world weather'
+  '7-day weather forecast'
 ];
 function buildSeoJsonLd({ name, url, description, keywords = [], entity = null, breadcrumbs = [], pageType = 'WebPage' }) {
   const pageId = url + '#webpage';

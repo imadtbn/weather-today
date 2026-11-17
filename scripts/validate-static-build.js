@@ -23,7 +23,7 @@ const pageSets = [
   ...world.map(city => ({ route: "world-capitals/" + city.slug + "/index.html", label: "capital " + city.slug }))
 ];
 function readJsonLd(html, label) {
-  const match = html.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/i);
+  const match = html.match(/<script[^>]*type=["']application\/ld\+json["'][^>]*>([\s\S]*?)<\/script>/i);
   if (!match) { fail("Missing JSON-LD script: " + label); return null; }
   try { return JSON.parse(match[1]); }
   catch (error) { fail("Invalid JSON-LD in " + label + ": " + error.message); return null; }

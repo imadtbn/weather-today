@@ -5,7 +5,7 @@ if(root){
  const card=city=>{
   const link=document.createElement("a");
   link.className="directory-card directory-card--unified";
-  link.href="./global-weather/?lat="+encodeURIComponent(city.latitude)+"&lon="+encodeURIComponent(city.longitude)+"&name="+encodeURIComponent(city.capital);
+  link.href="./world-capitals/"+encodeURIComponent(city.slug)+"/";
   link.setAttribute("aria-label","عرض الطقس في "+city.capital+"، "+city.country);
   const media=document.createElement("span");media.className="directory-card__media";
   const photo=document.createElement("img");photo.className="directory-card__photo";

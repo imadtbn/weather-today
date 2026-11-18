@@ -1,4 +1,4 @@
-import { countryFlag } from "./place-illustration.js";
+import { countryFlag, createPlaceIllustration, wilayaScene, capitalScene } from "./place-illustration.js";
 
 const kind = document.body.dataset.page;
 const root = document.querySelector("#page-content");
@@ -28,13 +28,30 @@ const normalize = value => String(value ?? "").normalize("NFKD").toLocaleLowerCa
   .replace(/ة/g,"ه").replace(/[\u0300-\u036f]/g,"").trim().replace(/\s+/g," ");
 const setStatus = message => { status.hidden = !message; status.textContent = message || ""; };
 const setCount = message => { count.textContent = message || ""; };
-const makeCard = ({ href, label, meta, title, image, imageAlt, phone }) => {
+
+if (["wilayas","arab-capitals","world-capitals"].includes(kind)) {
+  const hero = document.querySelector(".hero");
+  const note = hero?.querySelector(".hero-note");
+  const title = hero?.querySelector("h1")?.textContent || "الطقس اليوم";
+  if (note && !note.querySelector(".directory-hero-illustration")) {
+    const scene = kind === "wilayas" ? "coast" : kind === "arab-capitals" ? "city" : "river";
+    const illustration = createPlaceIllustration(scene, title, "استكشف الطقس");
+    illustration.classList.add("directory-hero-illustration");
+    note.prepend(illustration);
+  }
+}
+
+const makeCard = ({ href, label, meta, title, image, imageAlt, phone, scene = "city" }) => {
   const link = document.createElement("a");
   link.className = "directory-card directory-card--unified";
   link.href = href;
   link.setAttribute("aria-label", label);
   const media = document.createElement("span");
   media.className = "directory-card__media";
+  const showIllustration = () => {
+    media.classList.add("is-photo-missing");
+    media.replaceChildren(createPlaceIllustration(scene, title, "الطقس"));
+  };
   if (typeof image === "string" && image.trim()) {
     const photo = document.createElement("img");
     photo.className = "directory-card__photo";
@@ -42,26 +59,17 @@ const makeCard = ({ href, label, meta, title, image, imageAlt, phone }) => {
       const imageUrl = new URL(image.trim(), document.baseURI);
       if (!["http:", "https:"].includes(imageUrl.protocol)) throw new Error("Unsupported image URL");
       photo.src = imageUrl.href;
+      photo.alt = imageAlt || title;
+      photo.loading = "lazy";
+      photo.decoding = "async";
+      photo.referrerPolicy = "no-referrer";
+      photo.addEventListener("error", showIllustration, { once: true });
+      media.append(photo);
     } catch {
-      media.classList.add("is-photo-missing");
-      const placeholder = document.createElement("span");
-      placeholder.className = "directory-card__photo-placeholder";
-      placeholder.textContent = "تعذر تحميل صورة المدينة";
-      media.append(placeholder);
-      return link;
+      showIllustration();
     }
-    photo.alt = imageAlt || title;
-    photo.loading = "lazy";
-    photo.decoding = "async";
-    photo.referrerPolicy = "no-referrer";
-    photo.addEventListener("error", () => { photo.remove(); media.classList.add("is-photo-missing"); }, { once: true });
-    media.append(photo);
   } else {
-    media.classList.add("is-photo-missing");
-    const placeholder = document.createElement("span");
-    placeholder.className = "directory-card__photo-placeholder";
-    placeholder.textContent = "تُضاف صورة المدينة لاحقاً";
-    media.append(placeholder);
+    showIllustration();
   }
   const body = document.createElement("span");
   body.className = "directory-card__body";
@@ -86,18 +94,19 @@ const makeCard = ({ href, label, meta, title, image, imageAlt, phone }) => {
 };
 
 if (kind === "wilayas" || kind === "arab-capitals") {
-  let input = root.querySelector("input.directory-search-input");
-  if (!input) {
-    input = document.createElement("input");
-    input.className = "directory-search-input";
-    input.type = "search";
-    input.setAttribute("aria-label", kind === "wilayas" ? "بحث الولايات" : "بحث العواصم");
-  }
+  const input = document.createElement("input");
+  input.className = "directory-search-input";
+  input.type = "search";
+  input.autocomplete = "off";
+  input.placeholder = kind === "wilayas"
+    ? "ابحث باسم الولاية بالعربية أو الفرنسية أو الإنجليزية أو برقمها ومفتاح الهاتف..."
+    : "ابحث باسم العاصمة أو الدولة بالعربية أو الإنجليزية...";
+  input.setAttribute("aria-label", kind === "wilayas" ? "البحث في ولايات الجزائر" : "البحث في العواصم العربية");
   const inputWrap = document.createElement("div");
-  inputWrap.className = "directory-parity-search";
+  inputWrap.className = "world-capitals-search";
   inputWrap.append(input);
   const grid = document.createElement("div");
-  grid.className = "directory-grid directory-grid--visual-parity";
+  grid.className = "directory-grid directory-grid--visual-parity world-capitals-grid";
   root.replaceChildren(inputWrap, grid);
   const render = () => {
     const query = normalize(input.value);
@@ -110,32 +119,30 @@ if (kind === "wilayas" || kind === "arab-capitals") {
         title:city.name,
         image:city.countryImages,
         imageAlt:"صورة فوتوغرافية لمدينة "+city.name,
-        phone:city.countryPhone
+        phone:city.countryPhone,
+        scene:wilayaScene(city.region,city.coastal)
       })));
       setCount(rows.length+" ولاية مطابقة من أصل "+cities.length);
-      setStatus(rows.length ? "صور المدن الفوتوغرافية تُضاف يدوياً عبر بيانات countryImages." : "لا توجد ولاية مطابقة لهذا البحث.");
+      setStatus(rows.length ? "" : "لا توجد ولاية مطابقة. جرّب البحث باسمها بالعربية أو الفرنسية أو الإنجليزية أو برقم الولاية.");
     } else {
-      const rows = capitals.filter(city => normalize([city.country,city.capital,city.englishName].join(" ")).includes(query));
-      grid.replaceChildren(...rows.map(city => {
-        const card = makeCard({
-          href:"../world-capitals/"+encodeURIComponent(city.slug)+"/",
-          label:"عرض الطقس في "+city.capital,
-            meta:countryFlag(city.country)+" · "+city.country,
-          title:city.capital,
-          image:city.countryImages,
-          imageAlt:"صورة فوتوغرافية لمدينة "+city.capital,
-          phone:city.countryPhone
-        });
-        return card;
-      }));
+      const rows = capitals.filter(city => normalize([city.country,city.capital,city.englishName,city.slug].join(" ")).includes(query));
+      grid.replaceChildren(...rows.map(city => makeCard({
+        href:"../world-capitals/"+encodeURIComponent(city.slug)+"/",
+        label:"عرض الطقس في "+city.capital,
+        meta:countryFlag(city.country)+" · "+city.country,
+        title:city.capital,
+        image:city.countryImages,
+        imageAlt:"صورة فوتوغرافية لمدينة "+city.capital,
+        phone:city.countryPhone,
+        scene:capitalScene(city.slug)
+      })));
       setCount(rows.length+" عاصمة مطابقة من أصل "+capitals.length);
-      setStatus(rows.length ? "صور العواصم الفوتوغرافية تُضاف يدوياً عبر بيانات countryImages." : "لا توجد عاصمة مطابقة لهذا البحث.");
+      setStatus(rows.length ? "" : "لا توجد عاصمة مطابقة. جرّب البحث باسم الدولة أو العاصمة.");
     }
   };
   input.addEventListener("input",render);
   render();
 }
-
 
 if (kind === "world-capitals") {
   const worldCapitals = JSON.parse(document.querySelector("#world-capitals-data")?.textContent || "[]");
@@ -209,7 +216,8 @@ if (kind === "world-capitals") {
         title: city.capital,
         image: city.countryImages,
         imageAlt: "صورة فوتوغرافية لعاصمة " + city.country + "، " + city.capital,
-        phone: city.countryPhone
+        phone: city.countryPhone,
+        scene: sceneFor(city.continent)
       });
       return card;
     }));
@@ -217,7 +225,7 @@ if (kind === "world-capitals") {
       (continents.find(item => item[0] === activeContinent)?.[1] || "القارة المختارة");
     setCount(rows.length + " عاصمة · " + label + " · من أصل " + worldCapitals.length);
     setStatus(rows.length
-      ? "صور العواصم الفوتوغرافية تُضاف يدوياً عبر بيانات countryImages. اختر العاصمة لعرض الطقس الحالي والتوقعات."
+      ? ""
       : "لا توجد عاصمة مطابقة. جرّب البحث باسم الدولة أو بالاسم الإنجليزي.");
   };
 

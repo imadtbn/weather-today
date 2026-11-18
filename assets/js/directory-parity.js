@@ -59,16 +59,15 @@ const makeCard = ({ href, label, meta, title, image, imageAlt, phone, scene = "c
       const imageUrl = new URL(image.trim(), document.baseURI);
       if (!["http:", "https:"].includes(imageUrl.protocol)) throw new Error("Unsupported image URL");
       photo.src = imageUrl.href;
+      photo.alt = imageAlt || title;
+      photo.loading = "lazy";
+      photo.decoding = "async";
+      photo.referrerPolicy = "no-referrer";
+      photo.addEventListener("error", showIllustration, { once: true });
+      media.append(photo);
     } catch {
-      media.classList.add("is-photo-missing");
       showIllustration();
     }
-    photo.alt = imageAlt || title;
-    photo.loading = "lazy";
-    photo.decoding = "async";
-    photo.referrerPolicy = "no-referrer";
-    photo.addEventListener("error", showIllustration, { once: true });
-    media.append(photo);
   } else {
     showIllustration();
   }
@@ -96,12 +95,8 @@ const makeCard = ({ href, label, meta, title, image, imageAlt, phone, scene = "c
 
 if (kind === "wilayas" || kind === "arab-capitals") {
   const input = document.createElement("input");
-  if (!input) {
-    input = document.createElement("input");
-    input.className = "directory-search-input";
-    input.type = "search";
-  input.type = "search";
   input.className = "directory-search-input";
+  input.type = "search";
   input.autocomplete = "off";
   input.placeholder = kind === "wilayas"
     ? "ابحث باسم الولاية بالعربية أو الفرنسية أو الإنجليزية أو برقمها ومفتاح الهاتف..."
@@ -130,20 +125,17 @@ if (kind === "wilayas" || kind === "arab-capitals") {
       setCount(rows.length+" ولاية مطابقة من أصل "+cities.length);
       setStatus(rows.length ? "" : "لا توجد ولاية مطابقة. جرّب البحث باسمها بالعربية أو الفرنسية أو الإنجليزية أو برقم الولاية.");
     } else {
-      const rows = capitals.filter(city => normalize([city.country,city.capital,city.englishName].join(" ")).includes(query));
-      grid.replaceChildren(...rows.map(city => {
-        const card = makeCard({
-          href:"../world-capitals/"+encodeURIComponent(city.slug)+"/",
-          label:"عرض الطقس في "+city.capital,
-            meta:countryFlag(city.country)+" · "+city.country,
-          title:city.capital,
-          image:city.countryImages,
-          imageAlt:"صورة فوتوغرافية لمدينة "+city.capital,
-          phone:city.countryPhone,
-          scene:capitalScene(city.slug)
-        });
-        return card;
-      }));
+      const rows = capitals.filter(city => normalize([city.country,city.capital,city.englishName,city.slug].join(" ")).includes(query));
+      grid.replaceChildren(...rows.map(city => makeCard({
+        href:"../world-capitals/"+encodeURIComponent(city.slug)+"/",
+        label:"عرض الطقس في "+city.capital,
+        meta:countryFlag(city.country)+" · "+city.country,
+        title:city.capital,
+        image:city.countryImages,
+        imageAlt:"صورة فوتوغرافية لمدينة "+city.capital,
+        phone:city.countryPhone,
+        scene:capitalScene(city.slug)
+      })));
       setCount(rows.length+" عاصمة مطابقة من أصل "+capitals.length);
       setStatus(rows.length ? "" : "لا توجد عاصمة مطابقة. جرّب البحث باسم الدولة أو العاصمة.");
     }
@@ -151,7 +143,6 @@ if (kind === "wilayas" || kind === "arab-capitals") {
   input.addEventListener("input",render);
   render();
 }
-
 
 if (kind === "world-capitals") {
   const worldCapitals = JSON.parse(document.querySelector("#world-capitals-data")?.textContent || "[]");

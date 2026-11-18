@@ -175,9 +175,9 @@ cities.forEach((city) => {
   <meta property="og:title" content="طقس ولاية ${city.name} (${city.code}) | Weather Today">
   <meta property="og:description" content="حالة الطقس الآن والتوقعات الساعية والأسبوعية لولاية ${city.name}، مع درجات الحرارة والأمطار والرياح.">
   <meta property="og:url" content="https://imadtbn.github.io/weather-today/weather/${city.slug}/">
-  <meta property="og:image" content="https://imadtbn.github.io/weather-today/favicon.svg">
-  <meta property="og:image:alt" content="Weather Today | الطقس اليوم">
-  <meta name="twitter:card" content="summary">
+  <meta property="og:image" content="https://imadtbn.github.io/weather-today/images/bejaia.jpg">
+  <meta property="og:image:alt" content="ساحل بجاية والبحر الأبيض المتوسط">
+  <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="طقس ولاية ${city.name} | Weather Today">
   <meta name="twitter:description" content="حالة الطقس والتوقعات الجوية لولاية ${city.name}.">
   <meta name="theme-color" content="#0c5b8c">
@@ -769,30 +769,36 @@ directoryConfig.forEach((cfg) => {
   <link rel="manifest" href="../manifest.json">
   <link rel="stylesheet" href="../assets/css/site.css">
   <link rel="stylesheet" href="../assets/css/home-parity.css">
+  <link rel="stylesheet" href="../assets/css/directory-parity.css">
 </head>
-<body>
+<body class="marine-page">
   <a class="skip-link" href="#main">تجاوز إلى المحتوى</a>
   ${getHeader(1, 'marine')}
   <main id="main">
-    <section class="hero">
+    <section class="hero marine-hero">
       <div class="hero-copy">
         <span class="eyebrow"><span class="status-dot"></span> السواحل والملاحة البحرية</span>
         <h1 data-i18n="marine_title">النشرة البحرية وحالة الأمواج</h1>
         <p>متابعة خاصة للمدن الساحلية الجزائرية الـ 11 والشريط الساحلي على البحر الأبيض المتوسط: ارتفاع الأمواج، اتجاهها، وفتراتها.</p>
       </div>
     </section>
-    <section class="content-section">
+    <section class="content-section directory-page-content">
       <div class="section-heading">
         <div><span class="eyebrow">المدن الساحلية</span><h2>اختر مدينة ساحلية</h2></div>
         <p>11 ولاية ساحلية جزائرية مجهزة بقراءات بحرية متخصصة</p>
       </div>
-      <div class="directory-grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1rem;">
+      <p class="marine-directory-count">${cities.filter(c => c.coastal).length} ولاية ساحلية جزائرية</p>
+      <div class="directory-grid--visual-parity" id="marine-city-grid">
         ${cities.filter(c => c.coastal).map(c => `
-          <a class="directory-card directory-card--visual" href="../weather/${c.slug}/">
+          <a class="directory-card directory-card--unified" href="../weather/${c.slug}/" aria-label="عرض النشرة البحرية والطقس في ${c.name}">
+            <span class="directory-card__media">
+              <img class="directory-card__photo" src="${c.countryImages || ''}" alt="صورة ساحل ${c.name} في الجزائر" loading="lazy" decoding="async">
+            </span>
             <span class="directory-card__body">
               <span class="directory-card__meta">ولاية ${c.code} · ${c.region}</span>
               <strong class="directory-card__title">ساحل ${c.name}</strong>
-              <span class="directory-card__action">عرض النشرة البحرية ←</span>
+              <span class="directory-card__phone marine-phone-code" dir="rtl">دليل الهاتف: ${c.phone_code || 'غير متاح'}</span>
+              <span class="directory-card__action">عرض النشرة البحرية</span>
             </span>
           </a>
         `).join('')}

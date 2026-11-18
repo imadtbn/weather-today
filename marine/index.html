@@ -13,9 +13,9 @@
   <meta property="og:title" content="الطقس البحري وحالة السواحل الجزائرية | Weather Today">
   <meta property="og:description" content="تابع حالة البحر الأبيض المتوسط والسواحل الجزائرية، وارتفاع الأمواج واتجاهها والرياح البحرية.">
   <meta property="og:url" content="https://imadtbn.github.io/weather-today/marine/">
-  <meta property="og:image" content="https://imadtbn.github.io/weather-today/favicon.svg">
-  <meta property="og:image:alt" content="Weather Today | الطقس اليوم">
-  <meta name="twitter:card" content="summary">
+  <meta property="og:image" content="https://imadtbn.github.io/weather-today/images/bejaia.jpg">
+  <meta property="og:image:alt" content="ساحل بجاية والبحر الأبيض المتوسط">
+  <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="الطقس البحري وحالة السواحل | Weather Today">
   <meta name="twitter:description" content="النشرة البحرية وبيانات الأمواج والرياح على السواحل الجزائرية.">
   <title>الطقس البحري والسواحل | Weather Today | الطقس اليوم</title>
@@ -23,6 +23,7 @@
   <link rel="manifest" href="../manifest.json">
   <link rel="stylesheet" href="../assets/css/site.css">
   <link rel="stylesheet" href="../assets/css/home-parity.css">
+  <link rel="stylesheet" href="../assets/css/directory-parity.css">
   <meta name="google-site-verification" content="f5Xi4oFx0v5dN6iPZd9qCw-7vnc3vIbAeYF9jr4vwVM">
   <script async src="https://www.googletagmanager.com/gtm.js?id=GTM-NR5JGQ36"></script>
   <script>
@@ -33,7 +34,7 @@
   <link rel="stylesheet" href="../assets/css/adsense.css">
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5656416032906373" crossorigin="anonymous"></script>
 </head>
-<body>
+<body class="marine-page">
   <a class="skip-link" href="#main">تجاوز إلى المحتوى</a>
   
   <header class="site-header">
@@ -72,7 +73,7 @@
     </div>
   </header>
   <main id="main">
-    <section class="hero">
+    <section class="hero marine-hero">
       <div class="hero-copy">
         <span class="eyebrow"><span class="status-dot"></span> السواحل والملاحة البحرية</span>
         <h1 data-i18n="marine_title">النشرة البحرية وحالة الأمواج</h1>
@@ -86,101 +87,134 @@
            data-ad-client="ca-pub-5656416032906373" data-ad-slot="7867079394"></ins>
     </div>
 
-    <section class="content-section">
+    <section class="content-section directory-page-content">
       <div class="section-heading">
         <div><span class="eyebrow">المدن الساحلية</span><h2>اختر مدينة ساحلية</h2></div>
         <p>11 ولاية ساحلية جزائرية مجهزة بقراءات بحرية متخصصة</p>
       </div>
-      <div class="directory-grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1rem;">
-        
-          <a class="directory-card directory-card--visual" href="../weather/bejaia/">
+      <p class="marine-directory-count">11 ولاية ساحلية جزائرية</p>
+      <div class="directory-grid--visual-parity" id="marine-city-grid">
+          <a class="directory-card directory-card--unified" href="../weather/bejaia/" aria-label="عرض النشرة البحرية والطقس في بجاية">
+            <span class="directory-card__media">
+              <img class="directory-card__photo" src="/weather-today/images/bejaia.jpg" alt="صورة ساحل بجاية في الجزائر" loading="lazy" decoding="async">
+            </span>
             <span class="directory-card__body">
               <span class="directory-card__meta">ولاية 06 · الساحل الشرقي</span>
               <strong class="directory-card__title">ساحل بجاية</strong>
-              <span class="directory-card__action">عرض النشرة البحرية ←</span>
+              <span class="directory-card__phone marine-phone-code" dir="rtl">دليل الهاتف: 034</span>
+              <span class="directory-card__action">عرض النشرة البحرية</span>
             </span>
           </a>
-        
-          <a class="directory-card directory-card--visual" href="../weather/algiers/">
+          <a class="directory-card directory-card--unified" href="../weather/algiers/" aria-label="عرض النشرة البحرية والطقس في الجزائر العاصمة">
+            <span class="directory-card__media">
+              <img class="directory-card__photo" src="/weather-today/images/algiers.jpg" alt="صورة ساحل الجزائر العاصمة في الجزائر" loading="lazy" decoding="async">
+            </span>
             <span class="directory-card__body">
               <span class="directory-card__meta">ولاية 16 · الساحل الأوسط</span>
               <strong class="directory-card__title">ساحل الجزائر العاصمة</strong>
-              <span class="directory-card__action">عرض النشرة البحرية ←</span>
+              <span class="directory-card__phone marine-phone-code" dir="rtl">دليل الهاتف: 021</span>
+              <span class="directory-card__action">عرض النشرة البحرية</span>
             </span>
           </a>
-        
-          <a class="directory-card directory-card--visual" href="../weather/jijel/">
+          <a class="directory-card directory-card--unified" href="../weather/jijel/" aria-label="عرض النشرة البحرية والطقس في جيجل">
+            <span class="directory-card__media">
+              <img class="directory-card__photo" src="/weather-today/images/jijel.jpg" alt="صورة ساحل جيجل في الجزائر" loading="lazy" decoding="async">
+            </span>
             <span class="directory-card__body">
               <span class="directory-card__meta">ولاية 18 · الساحل الشرقي</span>
               <strong class="directory-card__title">ساحل جيجل</strong>
-              <span class="directory-card__action">عرض النشرة البحرية ←</span>
+              <span class="directory-card__phone marine-phone-code" dir="rtl">دليل الهاتف: 034</span>
+              <span class="directory-card__action">عرض النشرة البحرية</span>
             </span>
           </a>
-        
-          <a class="directory-card directory-card--visual" href="../weather/skikda/">
+          <a class="directory-card directory-card--unified" href="../weather/skikda/" aria-label="عرض النشرة البحرية والطقس في سكيكدة">
+            <span class="directory-card__media">
+              <img class="directory-card__photo" src="/weather-today/images/skikda.jpg" alt="صورة ساحل سكيكدة في الجزائر" loading="lazy" decoding="async">
+            </span>
             <span class="directory-card__body">
               <span class="directory-card__meta">ولاية 21 · الساحل الشرقي</span>
               <strong class="directory-card__title">ساحل سكيكدة</strong>
-              <span class="directory-card__action">عرض النشرة البحرية ←</span>
+              <span class="directory-card__phone marine-phone-code" dir="rtl">دليل الهاتف: 038</span>
+              <span class="directory-card__action">عرض النشرة البحرية</span>
             </span>
           </a>
-        
-          <a class="directory-card directory-card--visual" href="../weather/annaba/">
+          <a class="directory-card directory-card--unified" href="../weather/annaba/" aria-label="عرض النشرة البحرية والطقس في عنابة">
+            <span class="directory-card__media">
+              <img class="directory-card__photo" src="/weather-today/images/annaba.jpg" alt="صورة ساحل عنابة في الجزائر" loading="lazy" decoding="async">
+            </span>
             <span class="directory-card__body">
               <span class="directory-card__meta">ولاية 23 · الساحل الشرقي</span>
               <strong class="directory-card__title">ساحل عنابة</strong>
-              <span class="directory-card__action">عرض النشرة البحرية ←</span>
+              <span class="directory-card__phone marine-phone-code" dir="rtl">دليل الهاتف: 038</span>
+              <span class="directory-card__action">عرض النشرة البحرية</span>
             </span>
           </a>
-        
-          <a class="directory-card directory-card--visual" href="../weather/mostaganem/">
+          <a class="directory-card directory-card--unified" href="../weather/mostaganem/" aria-label="عرض النشرة البحرية والطقس في مستغانم">
+            <span class="directory-card__media">
+              <img class="directory-card__photo" src="/weather-today/images/mostaganem.jpg" alt="صورة ساحل مستغانم في الجزائر" loading="lazy" decoding="async">
+            </span>
             <span class="directory-card__body">
               <span class="directory-card__meta">ولاية 27 · الساحل الغربي</span>
               <strong class="directory-card__title">ساحل مستغانم</strong>
-              <span class="directory-card__action">عرض النشرة البحرية ←</span>
+              <span class="directory-card__phone marine-phone-code" dir="rtl">دليل الهاتف: 045</span>
+              <span class="directory-card__action">عرض النشرة البحرية</span>
             </span>
           </a>
-        
-          <a class="directory-card directory-card--visual" href="../weather/oran/">
+          <a class="directory-card directory-card--unified" href="../weather/oran/" aria-label="عرض النشرة البحرية والطقس في وهران">
+            <span class="directory-card__media">
+              <img class="directory-card__photo" src="/weather-today/images/oran.jpg" alt="صورة ساحل وهران في الجزائر" loading="lazy" decoding="async">
+            </span>
             <span class="directory-card__body">
               <span class="directory-card__meta">ولاية 31 · الساحل الغربي</span>
               <strong class="directory-card__title">ساحل وهران</strong>
-              <span class="directory-card__action">عرض النشرة البحرية ←</span>
+              <span class="directory-card__phone marine-phone-code" dir="rtl">دليل الهاتف: 041</span>
+              <span class="directory-card__action">عرض النشرة البحرية</span>
             </span>
           </a>
-        
-          <a class="directory-card directory-card--visual" href="../weather/boumerdes/">
+          <a class="directory-card directory-card--unified" href="../weather/boumerdes/" aria-label="عرض النشرة البحرية والطقس في بومرداس">
+            <span class="directory-card__media">
+              <img class="directory-card__photo" src="/weather-today/images/boumerdes.jpg" alt="صورة ساحل بومرداس في الجزائر" loading="lazy" decoding="async">
+            </span>
             <span class="directory-card__body">
               <span class="directory-card__meta">ولاية 35 · الساحل الأوسط</span>
               <strong class="directory-card__title">ساحل بومرداس</strong>
-              <span class="directory-card__action">عرض النشرة البحرية ←</span>
+              <span class="directory-card__phone marine-phone-code" dir="rtl">دليل الهاتف: 024</span>
+              <span class="directory-card__action">عرض النشرة البحرية</span>
             </span>
           </a>
-        
-          <a class="directory-card directory-card--visual" href="../weather/el-tarf/">
+          <a class="directory-card directory-card--unified" href="../weather/el-tarf/" aria-label="عرض النشرة البحرية والطقس في الطارف">
+            <span class="directory-card__media">
+              <img class="directory-card__photo" src="/weather-today/images/el-tarf.jpg" alt="صورة ساحل الطارف في الجزائر" loading="lazy" decoding="async">
+            </span>
             <span class="directory-card__body">
               <span class="directory-card__meta">ولاية 36 · الساحل الشرقي</span>
               <strong class="directory-card__title">ساحل الطارف</strong>
-              <span class="directory-card__action">عرض النشرة البحرية ←</span>
+              <span class="directory-card__phone marine-phone-code" dir="rtl">دليل الهاتف: 038</span>
+              <span class="directory-card__action">عرض النشرة البحرية</span>
             </span>
           </a>
-        
-          <a class="directory-card directory-card--visual" href="../weather/tipaza/">
+          <a class="directory-card directory-card--unified" href="../weather/tipaza/" aria-label="عرض النشرة البحرية والطقس في تيبازة">
+            <span class="directory-card__media">
+              <img class="directory-card__photo" src="/weather-today/images/tipaza.jpg" alt="صورة ساحل تيبازة في الجزائر" loading="lazy" decoding="async">
+            </span>
             <span class="directory-card__body">
               <span class="directory-card__meta">ولاية 42 · الساحل الأوسط</span>
               <strong class="directory-card__title">ساحل تيبازة</strong>
-              <span class="directory-card__action">عرض النشرة البحرية ←</span>
+              <span class="directory-card__phone marine-phone-code" dir="rtl">دليل الهاتف: 024</span>
+              <span class="directory-card__action">عرض النشرة البحرية</span>
             </span>
           </a>
-        
-          <a class="directory-card directory-card--visual" href="../weather/ain-temouchent/">
+          <a class="directory-card directory-card--unified" href="../weather/ain-temouchent/" aria-label="عرض النشرة البحرية والطقس في عين تموشنت">
+            <span class="directory-card__media">
+              <img class="directory-card__photo" src="/weather-today/images/ain-temouchent.jpg" alt="صورة ساحل عين تموشنت في الجزائر" loading="lazy" decoding="async">
+            </span>
             <span class="directory-card__body">
               <span class="directory-card__meta">ولاية 46 · الساحل الغربي</span>
               <strong class="directory-card__title">ساحل عين تموشنت</strong>
-              <span class="directory-card__action">عرض النشرة البحرية ←</span>
+              <span class="directory-card__phone marine-phone-code" dir="rtl">دليل الهاتف: 043</span>
+              <span class="directory-card__action">عرض النشرة البحرية</span>
             </span>
           </a>
-        
       </div>
     </section>
   </main>

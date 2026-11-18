@@ -25,6 +25,7 @@
     "./assets/js/home-visual-parity.js",
     "./assets/js/i18n.js",
     "./assets/js/map.js",
+    "./assets/js/marine-directory.js",
     "./assets/js/pages.js",
     "./assets/js/place-illustration.js",
     "./assets/js/share-export-parity.js",
